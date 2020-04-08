@@ -29,8 +29,10 @@ func getHref(t html.Token) (ok bool, href string) {
 // systems.
 func wget(url, parentdir string, filepath string) error {
 	// run shell `wget URL -O filepath`
-	cmd1 := exec.Command("mkdir ", parentdir)
+	cmd1 := exec.Command("mkdirs ", parentdir)
 	cmd1.Run()
+	cmd1.Stderr = os.Stdout
+	cmd1.Stderr = os.Stderr
 	cmd := exec.Command("wget", url, "-O", filepath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
