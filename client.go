@@ -27,8 +27,10 @@ func getHref(t html.Token) (ok bool, href string) {
 // Call shell command wget to download. The reason to use wget is that wget
 // supports automatically resume download. So this package only runs on Linux
 // systems.
-func wget(url, filepath string) error {
+func wget(url, parentdir string, filepath string) error {
 	// run shell `wget URL -O filepath`
+	cmd1 := exec.Command("mkdir ", parentdir)
+	cmd1.Run()
 	cmd := exec.Command("wget", url, "-O", filepath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -81,7 +83,7 @@ func crawl(parentUrl string, filePath string) {
 				fmt.Print("recurring ", parentUrl+url, "\n")
 				crawl(parentUrl+url, filePath+url)
 			} else {
-				wget(parentUrl+url, filePath+url)
+				wget(parentUrl+url, filePath, filePath+url)
 			}
 
 			for i := 0; i < len(urls); i++ {
